@@ -1,0 +1,37 @@
+# roblox-sprint-shift-script
+Speed up your player when pressing left shift in roblox studio.
+
+
+-- Get references to the player and their character
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Define the base walk speed and the speed increase factor
+local baseWalkSpeed = 16  -- You can adjust this value based on your game's default speed
+local speedIncreaseFactor = 2  -- Adjust this to control the speed increase
+
+-- Store the player's original walk speed
+local originalWalkSpeed = character.Humanoid.WalkSpeed
+
+-- Function to handle when the left shift key is pressed
+local function onShiftPressed()
+    character.Humanoid.WalkSpeed = originalWalkSpeed * speedIncreaseFactor
+end
+
+-- Function to handle when the left shift key is released
+local function onShiftReleased()
+    character.Humanoid.WalkSpeed = originalWalkSpeed
+end
+
+-- Connect the functions to the appropriate input events
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+    if input.KeyCode == Enum.KeyCode.LeftShift and not gameProcessedEvent then
+        onShiftPressed()
+    end
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(input, gameProcessedEvent)
+    if input.KeyCode == Enum.KeyCode.LeftShift then
+        onShiftReleased()
+    end
+end)
